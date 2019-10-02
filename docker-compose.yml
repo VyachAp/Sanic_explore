@@ -1,0 +1,33 @@
+version: '2.0'
+services:
+  sanic_board:
+    container_name: sanic_board
+    environment:
+      - SERVICE_NAME=sanic_board
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: "sanic_board"
+    depends_on:
+      - "postgres"
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+  postgres:
+    container_name: postgres
+    environment:
+      - SERVICE_NAME=postgres
+      - POSTGRES_PASSWORD=postgres
+    build:
+      context: .
+      dockerfile: postgres/Dockerfile
+    volumes:
+      - /etc/postgresql
+      - /var/log/postgresql
+      - /var/lib/postgresql
+    image: "postgres"
+    ports:
+      - "5432:5432"
+    networks:
+      - default
